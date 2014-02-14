@@ -1,0 +1,69 @@
+﻿<Window x:Class="TfsGitMonitor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
+        Title="MainWindow" Height="350" Width="525" Loaded="MainWindow_OnLoaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <tb:TaskbarIcon x:Name="NotifyIcon"
+                    Visibility="Visible"
+                    ToolTipText="TfsGit Monitor"
+                    MenuActivation="LeftOrRightClick"
+                    PopupActivation="DoubleClick" IconSource="activity_monitor.ico" TrayBalloonTipClicked="NotifyIcon_TrayBalloonTipClicked" TrayMouseDoubleClick="NotifyIcon_TrayMouseDoubleClick">
+            <tb:TaskbarIcon.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Afficher" x:Name="ShowMenuItem" Click="ShowMenuItem_OnClick"/>
+                    <MenuItem Header="Cacher" x:Name="HideMenuItem" Click="HideMenuItem_OnClick"/>
+                    <MenuItem Header="Quitter" x:Name="ExitMenuItem" Click="ExitMenuItem_OnClick"/>
+                </ContextMenu>
+            </tb:TaskbarIcon.ContextMenu>
+        </tb:TaskbarIcon>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <TextBlock Margin="5">User</TextBlock>
+            <TextBox Margin="5" Width="100" x:Name="LoginTextBox"></TextBox>
+            <TextBlock Margin="5">Pass</TextBlock>
+            <PasswordBox x:Name="Password" Width="100" Margin="5" KeyUp="Password_OnKeyUp" ></PasswordBox>
+            <Button x:Name="LogInButton" Click="ButtonClick_LogIn" Margin="5">LogIn</Button>
+            <Button x:Name="LogOutButton" Click="ButtonClick_LogOut" Margin="5">LogOut</Button>
+            <Button Click="ButtonBase_OnClick" Margin="5">Reload</Button>
+            <ProgressBar x:Name="Progress" IsIndeterminate="True" Width="100" Margin="5" Visibility="Collapsed" ></ProgressBar>
+            <TextBlock x:Name="NewCommitCount" Margin="5"></TextBlock>
+            <CheckBox IsChecked="True" x:Name="ShowAllPopupCheckBox" Margin="5">ShowAllPopup</CheckBox>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <TextBlock Text="Repos"/>
+            <ComboBox x:Name="ReposBox" SelectionChanged="ReposBox_OnSelectionChanged"/>
+            <TextBlock Text="Brances"/>
+            <ComboBox x:Name="BranchesBox" SelectionChanged="BranchesBox_OnSelectionChanged"/>
+        </StackPanel>
+        <DataGrid x:Name="DataGrid" Grid.Row="2" AutoGenerateColumns="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding CommitId}" Header="CommitId"/>
+                <DataGridTextColumn Binding="{Binding ObjectId}" Header="ObjId" Width="20"/>
+                <DataGridTextColumn Binding="{Binding GitObjectType}" Header="Obj Type"/>
+                <DataGridTextColumn Binding="{Binding Path}" Header="Path"/>
+                <DataGridTextColumn Binding="{Binding VersionString}" Header="Version"/>
+                <DataGridTextColumn Binding="{Binding LatestProcessedChange.CommitId}" Header="Latest Change CommitId"/>
+                <DataGridTextColumn Binding="{Binding LatestProcessedChange.Comment}" Header="Comment"/>
+                <DataGridCheckBoxColumn Binding="{Binding LatestProcessedChange.CommentTruncated}" Header="Truncated"/>
+                <DataGridTextColumn Binding="{Binding LatestProcessedChange.Author.Name}" Header="Author"/>
+                <DataGridTextColumn Binding="{Binding LatestProcessedChange.Author.Date, ConverterCulture=fr-FR}" Header="Author Date"/>
+                <DataGridTextColumn Binding="{Binding LatestProcessedChange.Committer.Name}" Header="Committer"/>
+                <DataGridTextColumn Binding="{Binding LatestProcessedChange.Committer.Date, ConverterCulture=fr-FR}" Header="Committer Date"/>
+                <DataGridComboBoxColumn ItemsSource="{Binding LatestProcessedChange.Changes}" DisplayMemberPath="{Binding Item.Path}" Header="Changes"/>
+                <DataGridTemplateColumn Header="Changes" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding LatestProcessedChange.Changes}" DisplayMemberPath="{Binding Item.Path}"></ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>

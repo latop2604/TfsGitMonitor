@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="TfsGitMonitor" Language="1036" Version="1.0.0.0" Manufacturer="Kaltenland" UpgradeCode="158b139a-8f56-413f-9ba6-bfd098598dd0">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate />
+
+		<Feature Id="ProductFeature" Title="TfsGitMonitor" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+      <ComponentGroupRef Id="ProductShortcutComponents" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="TfsGitMonitor" />
+			</Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="TfsGitMonitor"/>
+      </Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+      <Component Id="ProductComponent">
+        <File Source="$(var.TfsGitMonitor.TargetPath)" />
+      </Component>
+      <Component Id="ProductComponentExternal" Guid="E9155894-5B7A-42A2-9C3F-7458C7FD24A0">
+        <File Source="$(var.TfsGitMonitor.TargetDir)" Name="Microsoft.TeamFoundation.Common.dll" />
+        <File Source="$(var.TfsGitMonitor.TargetDir)" Name="Microsoft.TeamFoundation.Git.Client.dll" />
+        <File Source="$(var.TfsGitMonitor.TargetDir)" Name="Microsoft.TeamFoundation.Git.Common.dll" />
+        <File Source="$(var.TfsGitMonitor.TargetDir)" Name="Microsoft.TeamFoundation.SourceControl.WebApi.dll" />
+        <File Source="$(var.TfsGitMonitor.TargetDir)" Name="Microsoft.VisualStudio.Services.Client.dll" />
+        <File Source="$(var.TfsGitMonitor.TargetDir)" Name="Microsoft.VisualStudio.Services.Common.dll" />
+        <File Source="$(var.TfsGitMonitor.TargetDir)" Name="Microsoft.VisualStudio.Services.WebApi.dll" />
+        <File Source="$(var.TfsGitMonitor.TargetDir)" Name="PresentationCore.resources.dll" />
+        <File Source="$(var.TfsGitMonitor.TargetDir)" Name="PresentationFramework-SystemXml.dll" />
+        <File Source="$(var.TfsGitMonitor.TargetDir)" Name="PresentationFramework-SystemXmlLinq.dll" />
+        <File Source="$(var.TfsGitMonitor.TargetDir)" Name="PresentationFramework.Aero2.dll" />
+        <File Source="$(var.TfsGitMonitor.TargetDir)" Name="PresentationFramework.resources.dll" />
+        <File Source="$(var.TfsGitMonitor.TargetDir)" Name="SMDiagnostics.dll" />
+        <File Source="$(var.TfsGitMonitor.TargetDir)" Name="System.Net.Http.WebRequest.dll" />
+        <File Source="$(var.TfsGitMonitor.TargetDir)" Name="System.Runtime.Serialization.dll" />
+        <File Source="$(var.TfsGitMonitor.TargetDir)" Name="CredentialManagement.dll" />
+        <File Source="$(var.TfsGitMonitor.TargetDir)" Name="Hardcodet.Wpf.TaskbarNotification.dll" />
+        <File Source="$(var.TfsGitMonitor.TargetDir)" Name="Newtonsoft.Json.dll" />
+        <File Source="$(var.TfsGitMonitor.TargetDir)" Name="System.Net.Http.Formatting.dll" />
+        <File Source="$(var.TfsGitMonitor.TargetDir)" Name="System.Web.Http.dll" />
+        <File Source="$(var.TfsGitMonitor.TargetDir)" Name="UIAutomationTypes.dll" />
+        <File Source="$(var.TfsGitMonitor.TargetDir)" Name="TfsGitMonitor.exe.config" />
+      </Component>
+		</ComponentGroup>
+
+    <ComponentGroup Id="ProductShortcutComponents" Directory="ApplicationProgramsFolder">
+      <Component Id="ProductShortcutComponent" Guid="158b139a-8f56-413f-9ba6-bfd098598dd0">
+        <Shortcut Id="ApplicationStartMenuShortcut"
+                  Name="TfsGitMonitor"
+                  Description="Commit notifier for Git with TFS 2013"
+                  Target="[INSTALLFOLDER]TfsGitMonitor.exe"
+                  WorkingDirectory="INSTALLFOLDER"/>
+        <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
+        <RegistryValue Root="HKCU" Key="Software\Kaltenland\TfsGitMonitor" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+      </Component>
+    </ComponentGroup>
+	</Fragment>
+</Wix>
