@@ -305,14 +305,14 @@ namespace TfsGitMonitor
 
         private void ShowMenuItem_OnClick(object sender, RoutedEventArgs e)
         {
-            WindowState = WindowState.Normal;
-            ShowInTaskbar = true;
+            Show();
+            Activate();
         }
 
         private void HideMenuItem_OnClick(object sender, RoutedEventArgs e)
         {
-            WindowState = WindowState.Minimized;
             ShowInTaskbar = false;
+            Close();
         }
 
         private void ExitMenuItem_OnClick(object sender, RoutedEventArgs e)
@@ -325,8 +325,7 @@ namespace TfsGitMonitor
         {
             if (!CloseRequested)
             {
-                WindowState = WindowState.Minimized;
-                ShowInTaskbar = false;
+                Hide();
                 e.Cancel = true;
             }
             base.OnClosing(e);
